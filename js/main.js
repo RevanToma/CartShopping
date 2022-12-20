@@ -2,10 +2,13 @@ const shop = document.getElementById("shop");
 const shoppingCart = document.getElementById("shopping-cart");
 const btnCatagorys = document.querySelectorAll(".btnCatagorys");
 let cartAmount = document.querySelector(".cartAmount");
-let basket = JSON.parse(localStorage.getItem("data")) || [];
+// let basket = JSON.parse(localStorage.getItem("data")) || [];
 
 // cart arr
-let cart = [];
+let cart = JSON.parse(localStorage.getItem("data")) || [];
+
+// update the cartAmount based on the length of products added if page refreshes.
+cartAmount.innerHTML = cart.length;
 // Produktdatat finns i variabeln shopData (se data.js)
 
 const generateShop = () => {
@@ -42,6 +45,7 @@ function addToCart(id) {
   } else {
     // find current item with same id.
     const item = shopData.find((product) => product.id === id);
+    // increment cartAmount when product added.
     cartAmount.innerHTML++;
     // destruct and save all the old properties and add a new property.
     cart.push({
@@ -59,8 +63,9 @@ btnCatagorys.forEach((btn) => {
   btn.addEventListener("click", () => {
     const items = btn.getAttribute("data-category");
     shop.innerHTML = "";
-    filterItems(items).map((item) => {
-      shop.innerHTML += `
+    filterItems(items)
+      .map((item) => {
+        shop.innerHTML += `
       <div id="product-id-${item.id}" class="item">
            <img width="220" src="${item.image}" alt="">
             <div class="details">
@@ -75,14 +80,12 @@ btnCatagorys.forEach((btn) => {
             </div>
           </div>
       `;
-    });
+      })
+      .join("");
   });
 });
 
-// const categoris = shopData.map((items) => {
-//   return items.category;
-// });
-
+// func to take category as argument so i can map thru and render the chosen category.
 function filterItems(category) {
   return shopData.filter((item) => item.category === category);
 }

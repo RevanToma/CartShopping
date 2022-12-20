@@ -1,6 +1,6 @@
 let shoppingCart = document.getElementById("shopping-cart");
-let basket = JSON.parse(localStorage.getItem("data")) || [];
-
+// let basket = JSON.parse(localStorage.getItem("data")) || [];
+cart = JSON.parse(localStorage.getItem("data") || []);
 // Produktdatat finns i variabeln shopData (se data.js)
 
 const generateCartItems = () => {
@@ -8,7 +8,7 @@ const generateCartItems = () => {
   //
   // Använd denna markup för varje produktkort - den korresponderar mot CSS:en
   shoppingCart.innerHTML = "";
-  basket
+  cart
     .map((item) => {
       shoppingCart.innerHTML += `<div class="cart-item">
    <img width="100" src=${item.image} alt="" />
@@ -38,7 +38,7 @@ updateCart();
 
 // function to check the action if minus decrement, if plus increment.
 function changeNumOfUnits(action, id) {
-  basket = basket.map((item) => {
+  cart = cart.map((item) => {
     let numberOfUnits = item.numberOfUnits;
     if (item.id === id) {
       if (action === "minus" && numberOfUnits > 1) {
@@ -58,11 +58,11 @@ function changeNumOfUnits(action, id) {
 // function to update the cart.
 function updateCart() {
   generateCartItems();
-  localStorage.setItem("data", JSON.stringify(basket));
-  cartAmount.innerHTML = basket.length;
+  localStorage.setItem("data", JSON.stringify(cart));
+  cartAmount.innerHTML = cart.length;
 }
 // remove product func
 function removeItem(id) {
-  basket = basket.filter((item) => item.id !== id);
+  cart = cart.filter((item) => item.id !== id);
   updateCart();
 }
